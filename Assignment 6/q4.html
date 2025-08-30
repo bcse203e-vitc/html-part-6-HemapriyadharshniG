@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h2>Hobbies Form</h2>
+
+<form id="hobbyForm">
+  <div id="hobbies">
+    <input type="text" class="hobby" placeholder="Enter a hobby">
+    <span></span>
+  </div>
+  <button type="button" id="addBtn">Add Hobby</button>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const hobbyRegex = /^[A-Za-z\s]+$/;
+  const container = document.getElementById("hobbies");
+  const addBtn = document.getElementById("addBtn");
+
+  function validate(input) {
+    const msg = input.nextElementSibling;
+    if (hobbyRegex.test(input.value)) {
+      msg.textContent = "Valid";
+      return true;
+    } else {
+      msg.textContent = "Invalid";
+      return false;
+    }
+  }
+
+  document.querySelector(".hobby").addEventListener("blur", function() {
+    validate(this);
+  });
+
+  addBtn.onclick = function() {
+    const div = document.createElement("div");
+    div.innerHTML = '<input type="text" class="hobby" placeholder="Enter a hobby"><span></span>';
+    container.appendChild(div);
+
+    div.querySelector(".hobby").addEventListener("blur", function() {
+      validate(this);
+    });
+  };
+
+  document.getElementById("hobbyForm").onsubmit = function(e) {
+    e.preventDefault();
+    let allValid = true;
+    document.querySelectorAll(".hobby").forEach(input => {
+      if (!validate(input)) allValid = false;
+    });
+    if (allValid) alert("Form submitted!");
+    else alert("Fix errors before submitting.");
+  };
+</script>
+
+</body>
+</html>

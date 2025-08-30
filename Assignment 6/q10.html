@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dynamic Form Builder</title>
+</head>
+<body>
+
+<h2>Dynamic Form Builder</h2>
+
+<label for="inputType">Choose Input Type:</label>
+<select id="inputType">
+  <option value="">--Select--</option>
+  <option value="text">Text</option>
+  <option value="email">Email</option>
+  <option value="password">Password</option>
+</select>
+
+<button id="addBtn">Add</button>
+
+<form id="dynamicForm">
+  <h3>Your Form</h3>
+  <div id="formFields"></div>
+  <br>
+  <button type="submit">Submit</button>
+</form>
+
+<script>
+  const addBtn = document.getElementById("addBtn");
+  const formFields = document.getElementById("formFields");
+  const form = document.getElementById("dynamicForm");
+
+  const validators = {
+    text: /^[a-zA-Z\s]{3,}$/,      
+    email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/, 
+    password: /^(?=.*[A-Z])(?=.*\d).{6,}$/ 
+  };
+
+  let fieldCount = 0;
+
+  addBtn.addEventListener("click", function () {
+    const type = document.getElementById("inputType").value;
+    if (!type) return alert("Please select an input type!");
+
+    fieldCount++;
+    const wrapper = document.createElement("div");
+    wrapper.innerHTML = `
+      <label>${type} Input ${fieldCount}: </label>
+      <input type="${type}" name="${type}${fieldCount}" data-type="${type}">
+      <span style="color:red; display:none;">Invalid ${type}</span>
+      <br><br>
+    `;
+    formFields.appendChild(wrapper);
+  });
+
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    let isValid = true;
+
+    const inputs = form.querySelectorAll("input");
+    inputs.forEach(input => {
+      const type = input.dataset.type;
+      const regex = validators[type];
+      const errorSpan = input.nextElementSibling;
+
+      if (regex && !regex.test(input.value)) {
+        errorSpan.style.display = "inline";
+        isValid = false;
+      } else {
+        errorSpan.style.display = "none";
+      }
+    });
+
+    if (isValid) {
+      alert("Form submitted successfully!");
+      form.reset();
+      formFields.innerHTML = "";
+      fieldCount = 0;
+    }
+  });
+</script>
+
+</body>
+</html>

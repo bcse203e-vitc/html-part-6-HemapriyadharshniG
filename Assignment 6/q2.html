@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Email Validation on Blur</title>
+</head>
+<body>
+
+  <h2>Email Validation</h2>
+  <form>
+    <label for="email">Email:</label><br>
+    <input type="text" id="email" placeholder="Enter your email" />
+    <div id="message"></div>
+  </form>
+
+  <script>
+    const emailInput = document.getElementById("email");
+    const messageDiv = document.getElementById("message");
+
+    // Regex for email validation
+    const emailRegex = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+
+    emailInput.onblur = function () {
+      if (emailRegex.test(emailInput.value)) {
+        messageDiv.textContent = "Valid email address!";
+        messageDiv.className = "success";
+      } else {
+        messageDiv.textContent = "❌ Invalid email format.";
+        messageDiv.className = "error";
+      }
+    };
+  </script>
+
+</body>
+</html>
